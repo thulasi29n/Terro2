@@ -1,0 +1,67 @@
+# 1. Create vpc -- 10.10.0.0/16 -- Project_Vpc
+# 2. Create Internet Gateway -- Project_GW
+# 3. Create Custom Route Table -- Project_RT  .. accept all .. 0.0.0.0/.
+# 4. Create a Subnet -- 10.10.1.0/24 .. Project_Subnet .. AZ - "us-east-1a"
+# 5. Associate subnet with Route Table
+# 6. Create Security Group to allow port 22, -- ingress=443,80,22; egress=anything
+# 7. Create a network interface with an ip in the subnet that was created in step 4 -- 10.10.1.50,10.10.1.51
+# 8. Assign an elastic IP to the network interface created in step 7 -- 10.10.1.50
+    (EIP depends on Internet Gateway.. so we need to use depends on for EIP)
+# 9. Create Ubuntu server and install/enable apache2
+
+
+terraform state commands
+terraform state
+teraform state list
+terraform  state show aws_route_table.Project_RT
+
+  ################################################
+
+PS D:\Multi_Cloud\Terraform\Project> terraform state show aws_eip.Project_EIP
+# aws_eip.Project_EIP:
+resource "aws_eip" "Project_EIP" {
+    associate_with_private_ip = "10.10.1.50"
+    association_id            = "eipassoc-0613cfc3d59b090a1"
+    domain                    = "vpc"
+    id                        = "eipalloc-0fb1fa5ee90376a30"
+    instance                  = "i-0eb2e4c91bfdfa4e5"
+    network_border_group      = "us-east-1"
+    network_interface         = "eni-04c4939ac54378e4f"
+    private_dns               = "ip-10-10-1-50.ec2.internal"
+    private_ip                = "10.10.1.50"
+    public_dns                = "ec2-3-214-240-255.compute-1.amazonaws.com"
+    public_ip                 = "3.214.240.255"
+    public_ipv4_pool          = "amazon"
+    tags                      = {}
+    tags_all                  = {}
+    vpc                       = true
+}
+
+
+
+
+
+####################################################
+
+terraform destroy -target <<target_name>>
+
+terraform apply -target <<target_name>>
+
+##################################################
+
+variable "varaiable_name" {
+    description
+    defualt value 
+    type
+}
+
+terraform apply -var "subnet_prefix=10.10.1.0/24"
+
+#########################################################
+
+filename : terraform.tfvars
+
+if we declare a varaible in .tfvars file... it will not prompt during apply
+
+terraform apply -var-file example.tfvars
+
